@@ -13,7 +13,7 @@ VALUES ($1, $2);
 	SqlDeleteLike = `
 DELETE
 FROM likes
-WHERE post_id = $1 AND user_id = $2;
+WHERE user_id = $1 AND post_id = $2;
 `
 )
 

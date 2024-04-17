@@ -12,22 +12,30 @@ const (
 SELECT p.id,
        title,
        text,
-       user_id,
-       u.login as user_name,
+       p.user_id,
+       u.login          as user_name,
+       count(l.post_id) as count_likes,
        created_date
 FROM posts p
-LEFT JOIN users u on u.id = p.user_id;
+         LEFT JOIN users u on p.user_id = u.id
+         LEFT JOIN likes l on p.id = l.post_id
+GROUP BY p.id, title, text, p.user_id, u.login, created_date
+ORDER BY created_date DESC;
 `
 	SqlSelectPost = `
 SELECT p.id,
        title,
        text,
-       user_id,
-       u.login as user_name,
+       p.user_id,
+       u.login          as user_name,
+       count(l.post_id) as count_likes,
        created_date
 FROM posts p
-LEFT JOIN users u on u.id = p.user_id
-WHERE p.id = $1;
+         LEFT JOIN users u on p.user_id = u.id
+         LEFT JOIN likes l on p.id = l.post_id
+WHERE p.id = $1
+GROUP BY p.id, title, text, p.user_id, u.login, created_date
+ORDER BY created_date DESC;
 `
 	SqlInsertPost = `
 INSERT INTO posts (title, text, user_id)
@@ -104,7 +112,7 @@ func (p *PDB) InsertPost(ctx context.Context, post models.Post) error {
 }
 
 func (p *PDB) UpdatePost(ctx context.Context, post models.Post) error {
-	commandTag, err := p.ExecTx(ctx, SqlUpdatePost, post.Title, post.Text, post.UserID)
+	commandTag, err := p.ExecTx(ctx, SqlUpdatePost, post.Title, post.Text, post.ID)
 	if err != nil {
 		return err
 	}

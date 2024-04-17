@@ -12,7 +12,7 @@ type Post struct {
 	Text            string    `json:"text" db:"text"`
 	UserID          uint64    `json:"user_id" db:"user_id"`
 	UserName        string    `json:"user_name" db:"user_name"`
-	CountLikes      int       `json:"count_likes" db:"-"`
+	CountLikes      int       `json:"count_likes" db:"count_likes"`
 	CreatedDateUnix int64     `json:"created_date" db:"-"`
 	CreatedDate     time.Time `json:"-" db:"created_date"`
 }
