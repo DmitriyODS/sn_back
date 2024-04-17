@@ -23,7 +23,7 @@ func (hs *HttpServer) authorizedUser(ctx *fiber.Ctx) error {
 
 	// функция возвращает подпись ключа
 	keyFunc := func(t *jwt.Token) (any, error) {
-		return cfg.GetAppConfig().SecretKey, nil
+		return []byte(cfg.GetAppConfig().SecretKey), nil
 	}
 
 	claims, err := utils.ParseAndValidateJWT(accessToken, keyFunc)
@@ -49,7 +49,7 @@ func (hs *HttpServer) makeTransportMiddleware(skipUrls ...string) fiber.Handler 
 			}
 
 			if err != nil {
-				resp.SetResponse(fiber.StatusInternalServerError, nil, ErrServer)
+				resp.SetResponse(fiber.StatusInternalServerError, nil, err)
 				err = nil
 			}
 
@@ -63,7 +63,10 @@ func (hs *HttpServer) makeTransportMiddleware(skipUrls ...string) fiber.Handler 
 		}()
 
 		req := &models.ClientData{}
-		resp := &models.Response{}
+		resp := &models.Response{
+			Ok:   true,
+			Code: 200,
+		}
 		ctx.Locals(CtxReq, req)
 		ctx.Locals(CtxResp, resp)
 
@@ -115,6 +118,10 @@ func (hs *HttpServer) makeTransactionMiddleware() fiber.Handler {
 		err = ctx.Next()
 		if err != nil {
 			log.Errorf("Error in handler: %v", err)
+			return err
+		}
+
+		if err = tx.Commit(newCtx); err != nil {
 			return err
 		}
 

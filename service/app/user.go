@@ -17,7 +17,7 @@ func (a *App) Login(ctx context.Context, user models.User) (models.User, error) 
 	}
 
 	user.ID = userID
-
+	user.Password = ""
 	// создадим AccessToken
 	if user.AccessToken, err = utils.MakeAccessJWT(userID); err != nil {
 		return user, err

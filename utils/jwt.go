@@ -24,13 +24,7 @@ func MakeAccessJWT(userID uint64) (string, error) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-
-	signingBytes, err := DecodeBase64(cfg.GetAppConfig().SecretKey)
-	if err != nil {
-		return "", err
-	}
-
-	return token.SignedString(signingBytes)
+	return token.SignedString([]byte(cfg.GetAppConfig().SecretKey))
 }
 
 // ParseAndValidateJWT - парсит JWT

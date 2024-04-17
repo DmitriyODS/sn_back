@@ -51,11 +51,11 @@ func GetAppConfig() *AppConfig {
 
 			PsqlLogin: getEnv(PsqlLogin, "idon"),
 			PsqlPass:  getEnv(PsqlPass, "test_db_password"),
-			PsqlDB:    getEnv(PsqlDB, "hola"),
+			PsqlDB:    getEnv(PsqlDB, "network"),
 			PsqlAddr:  getEnv(PsqlAddr, "127.0.0.1"),
 			PsqlPort:  getEnv(PsqlPort, "5432"),
 
-			SecretKey: getEnv(SecretKey, ""),
+			SecretKey: getEnv(SecretKey, "very_very_secret_key"),
 		}
 	}
 

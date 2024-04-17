@@ -82,9 +82,8 @@ func (hs *HttpServer) initGlobalMiddleware() {
 			fiber.HeaderAuthorization,
 			fiber.HeaderContentType,
 		}, ","),
-		AllowCredentials: true,
-		ExposeHeaders:    "",
-		MaxAge:           12,
+		ExposeHeaders: "",
+		MaxAge:        12,
 	}))
 }
 

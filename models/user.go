@@ -6,14 +6,14 @@ import (
 )
 
 type User struct {
-	ID          uint64 `json:"id"`
-	Login       string `json:"login"`
-	Password    string `json:"password"`
-	AccessToken string `json:"access_token"`
+	ID          uint64 `json:"id" db:"id"`
+	Login       string `json:"login" db:"login"`
+	Password    string `json:"password" db:"-"`
+	AccessToken string `json:"access_token" db:"-"`
 }
 
 type AuthRepository interface {
-	SelectUser(ctx context.Context, login User) (uint64, error)
+	SelectUser(ctx context.Context, user User) (uint64, error)
 }
 
 func (l User) Validate() error {

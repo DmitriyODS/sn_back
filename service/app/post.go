@@ -30,5 +30,5 @@ func (a *App) GetPost(ctx context.Context, id uint64) (models.Post, error) {
 }
 
 func (a *App) GetPosts(ctx context.Context) (models.Posts, error) {
-	return a.reps.SelectPosts(ctx)
+	return a.reps.SelectPostList(ctx)
 }
