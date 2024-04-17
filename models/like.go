@@ -10,4 +10,5 @@ type Like struct {
 type LikeRepository interface {
 	InsertLike(ctx context.Context, like Like) error
 	DeleteLike(ctx context.Context, like Like) error
+	ToggleLike(ctx context.Context, like Like) error
 }

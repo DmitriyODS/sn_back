@@ -12,3 +12,7 @@ func (a *App) AddLike(ctx context.Context, like models.Like) error {
 func (a *App) DeleteLike(ctx context.Context, like models.Like) error {
 	return a.reps.DeleteLike(ctx, like)
 }
+
+func (a *App) ToggleLike(ctx context.Context, like models.Like) error {
+	return a.reps.ToggleLike(ctx, like)
+}

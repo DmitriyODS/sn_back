@@ -118,4 +118,5 @@ func (hs *HttpServer) registerLikeRoutes() {
 
 	likes.Post("/", hs.makeAddLikeHandler())
 	likes.Delete("/", hs.makeDeleteLikeHandler())
+	likes.Put("/", hs.makeToggleLikeHandler())
 }
