@@ -8,6 +8,7 @@ import (
 
 func (hs *HttpServer) makeGetPostHandler() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
+		userID := ctx.QueryInt("user_id", 0)
 		postID, err := ctx.ParamsInt("id", 0)
 		if err != nil {
 			return err
@@ -15,7 +16,7 @@ func (hs *HttpServer) makeGetPostHandler() fiber.Handler {
 
 		serviceCtx := ctx.Locals(CtxTx).(context.Context)
 
-		respData, err := hs.appService.GetPost(serviceCtx, uint64(postID))
+		respData, err := hs.appService.GetPost(serviceCtx, uint64(postID), uint64(userID))
 		if err != nil {
 			return err
 		}
@@ -29,9 +30,10 @@ func (hs *HttpServer) makeGetPostHandler() fiber.Handler {
 
 func (hs *HttpServer) makeGetPostsHandler() fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
+		userID := ctx.QueryInt("user_id", 0)
 		serviceCtx := ctx.Locals(CtxTx).(context.Context)
 
-		respData, err := hs.appService.GetPosts(serviceCtx)
+		respData, err := hs.appService.GetPosts(serviceCtx, uint64(userID))
 		if err != nil {
 			return err
 		}

@@ -15,6 +15,7 @@ SELECT p.id,
        p.user_id,
        u.login          as user_name,
        count(l.post_id) as count_likes,
+       EXISTS (SELECT 1 FROM likes l2 WHERE l2.user_id = $1 AND l2.post_id = p.id) as is_your_like,
        created_date
 FROM posts p
          LEFT JOIN users u on p.user_id = u.id
@@ -29,6 +30,7 @@ SELECT p.id,
        p.user_id,
        u.login          as user_name,
        count(l.post_id) as count_likes,
+       EXISTS (SELECT 1 FROM likes l2 WHERE l2.user_id = $2 AND l2.post_id = p.id) as is_your_like,
        created_date
 FROM posts p
          LEFT JOIN users u on p.user_id = u.id
@@ -54,12 +56,12 @@ WHERE id = $1;
 `
 )
 
-func (p *PDB) SelectPost(ctx context.Context, id uint64) (models.Post, error) {
+func (p *PDB) SelectPost(ctx context.Context, post_id uint64, user_id uint64) (models.Post, error) {
 	var rows pgx.Rows
 	var err error
 	var post models.Post
 
-	rows, err = p.QueryTx(ctx, SqlSelectPost, id)
+	rows, err = p.QueryTx(ctx, SqlSelectPost, post_id, user_id)
 	if rows == nil {
 		return post, models.ErrNoRows
 	}
@@ -79,10 +81,10 @@ func (p *PDB) SelectPost(ctx context.Context, id uint64) (models.Post, error) {
 	return post, nil
 }
 
-func (p *PDB) SelectPostList(ctx context.Context) (models.Posts, error) {
+func (p *PDB) SelectPostList(ctx context.Context, user_id uint64) (models.Posts, error) {
 	var posts models.Posts
 
-	rows, err := p.QueryTx(ctx, SqlSelectPosts)
+	rows, err := p.QueryTx(ctx, SqlSelectPosts, user_id)
 	if err != nil {
 		return posts, err
 	}
