@@ -99,6 +99,7 @@ func (hs *HttpServer) registeredAuthRoutes() {
 	auth := hs.rootRouter.Group("/auth")
 
 	auth.Post("/login", hs.makeLoginHandler())
+	auth.Post("/reg", hs.makeRegisterHandler())
 }
 
 func (hs *HttpServer) registerPostRoutes() {

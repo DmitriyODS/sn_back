@@ -14,6 +14,7 @@ type User struct {
 
 type AuthRepository interface {
 	SelectUser(ctx context.Context, user User) (uint64, error)
+	InsertUser(ctx context.Context, user User) (uint64, error)
 }
 
 func (l User) Validate() error {

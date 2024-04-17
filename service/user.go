@@ -12,4 +12,5 @@ var (
 
 type AuthService interface {
 	Login(ctx context.Context, user models.User) (models.User, error)
+	Register(ctx context.Context, user models.User) (models.User, error)
 }

@@ -26,3 +26,24 @@ func (hs *HttpServer) makeLoginHandler() fiber.Handler {
 		return nil
 	}
 }
+
+func (hs *HttpServer) makeRegisterHandler() fiber.Handler {
+	return func(ctx *fiber.Ctx) error {
+		var user models.User
+		if err := ctx.BodyParser(&user); err != nil {
+			return err
+		}
+
+		serviceCtx := ctx.Locals(CtxTx).(context.Context)
+
+		respData, err := hs.appService.Register(serviceCtx, user)
+		if err != nil {
+			return err
+		}
+
+		resp := ctx.Locals(CtxResp).(*models.Response)
+		resp.Data = respData
+
+		return nil
+	}
+}
